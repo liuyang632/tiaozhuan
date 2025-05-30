@@ -1,404 +1,119 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WiFi连接命令生成器</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-color: #4a90e2;
-            --success-color: #34c759;
-            --danger-color: #ff3b30;
-            --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            --bg-gradient-night: linear-gradient(135deg, #2c3e50 0%, #1a242f 100%);
-            --text-color: #2d3748;
-            --text-color-night: #f5f7fa;
-            --container-bg: rgba(255, 255, 255, 0.95);
-            --container-bg-night: rgba(0, 0, 0, 0.5);
-            --input-bg: #f8fafc;
-            --input-bg-night: #2d3748;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            min-height: 100vh;
-            padding: 2rem 1rem;
-            background: var(--bg-gradient);
-            color: var(--text-color);
-            line-height: 1.6;
-            transition: background 0.3s ease, color 0.3s ease;
-            position: relative;
-        }
-
-        .container {
-            max-width: 680px;
-            margin: 0 auto;
-            background: var(--container-bg);
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: background 0.3s ease;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: var(--primary-color);
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
-
-        .input-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: #4a5568;
-        }
-
-        input {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: var(--input-bg);
-            color: inherit;
-        }
-
-        input:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
-        }
-
-        .result-box {
-            position: relative;
-            margin: 2rem 0;
-        }
-
-        textarea {
-            width: 100%;
-            height: 120px;
-            padding: 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            resize: vertical;
-            font-family: 'Consolas', monospace;
-            font-size: 0.9rem;
-            background: var(--input-bg);
-            transition: border-color 0.3s ease;
-            color: inherit;
-        }
-
-        .button-group {
-            display: flex;
-            gap: 0.8rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        button {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            flex: 1;
-            min-width: 120px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .copy-btn {
-            background: var(--success-color);
-            color: white;
-        }
-
-        .clear-btn {
-            background: var(--danger-color);
-            color: white;
-        }
-
-        .toggle-night-mode-btn {
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            width: 2.5rem;
-            height: 2.5rem;
-            padding: 0;
-            background: transparent;
-            color: var(--text-color);
-            border: none;
-            font-size: 1.5rem;
-        }
-
-        body.night-mode .toggle-night-mode-btn {
-            color: var(--text-color-night);
-        }
-
-        button:hover {
-            filter: brightness(0.9);
-            transform: translateY(-1px);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 480px) {
-            .container {
-                padding: 1.5rem;
-                border-radius: 12px;
-            }
-
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            button {
-                flex: 100%;
-                padding: 1rem;
-            }
-
-            input,
-            textarea {
-                font-size: 0.95rem;
-            }
-
-            .toggle-night-mode-btn {
-                top: 0.5rem;
-                right: 0.5rem;
-                width: 2rem;
-                height: 2rem;
-                font-size: 1.2rem;
+    <title>页面跳转中</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    
+    <!-- Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3B82F6',
+                        secondary: '#10B981',
+                        neutral: '#1F2937',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
             }
         }
-
-        /* 动画效果 */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
+    </script>
+    
+    <!-- 自定义工具类 -->
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
             }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .animation-delay-300 {
+                animation-delay: 300ms;
             }
-        }
-
-        .container {
-            animation: fadeIn 0.6s ease;
-        }
-
-        /* 提示信息样式 */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-
-        .toast.show {
-            opacity: 1;
-        }
-
-        body.night-mode {
-            background: var(--bg-gradient-night);
-            color: var(--text-color-night);
-        }
-
-        body.night-mode .container {
-            background: var(--container-bg-night);
-        }
-
-        body.night-mode input,
-        body.night-mode textarea {
-            border-color: #555;
-            background: var(--input-bg-night);
-        }
-
-        body.night-mode .toggle-night-mode-btn .fa-sun {
-            display: block;
-        }
-
-        body.night-mode .toggle-night-mode-btn .fa-moon {
-            display: none;
-        }
-
-        .toggle-night-mode-btn .fa-sun {
-            display: none;
-        }
-
-        /* 新增类，用于居中链接 */
-        .center-link {
-            text-align: center;
-            margin-top: 20px;
+            .animation-delay-600 {
+                animation-delay: 600ms;
+            }
         }
     </style>
 </head>
-
-<body>
-    <div class="container">
-        <h1>📶 WiFi连接命令生成工具</h1>
-
-        <div class="input-group">
-            <label for="ssid">🔗 无线网络名称 (SSID)</label>
-            <input type="text" id="ssid" placeholder="请输入WiFi名称" autocomplete="off">
+<body class="font-inter bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white rounded-xl shadow-lg p-8 transform transition-all duration-500 hover:shadow-xl">
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 text-primary mb-4">
+                <i class="fa fa-exchange text-2xl"></i>
+            </div>
+            <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-bold text-neutral mb-2">页面跳转</h1>
+            <p class="text-gray-600">正在自动为您跳转至目标页面</p>
         </div>
-
-        <div class="input-group">
-            <label for="password">🔑 无线网络密码</label>
-            <input type="password" id="password" placeholder="请输入WiFi密码" autocomplete="off">
-        </div>
-
-        <div class="input-group">
-            <label for="interface">🖧 网卡接口</label>
-            <input type="text" id="interface" placeholder="请输入网卡接口，默认usbwlan" value="usbwlan" autocomplete="off">
-        </div>
-
-        <div class="result-box">
-            <label>🖥️ 生成命令：</label>
-            <textarea id="output" readonly></textarea>
-            <div class="button-group">
-                <button class="copy-btn" onclick="copyCommand()">
-                    <span>📋 复制命令</span>
-                </button>
-                <button class="clear-btn" onclick="clearAll()">
-                    <span>🧹 一键清空</span>
-                </button>
+        
+        <div class="relative">
+            <!-- 进度条 -->
+            <div class="h-2 bg-gray-200 rounded-full overflow-hidden">
+                <div id="progress-bar" class="h-full bg-primary rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            
+            <!-- 倒计时 -->
+            <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-white py-2 px-4 rounded-lg shadow-md">
+                <p class="text-neutral font-medium">
+                    <i class="fa fa-clock-o mr-2"></i>
+                    <span id="countdown">3</span> 秒后自动跳转
+                </p>
             </div>
         </div>
+        
+        <div class="mt-8 text-center">
+            <p class="text-gray-500 text-sm">如果您的浏览器没有自动跳转，请点击下方按钮</p>
+            <button id="redirect-btn" class="mt-4 bg-primary hover:bg-primary/90 text-white font-medium py-2 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center mx-auto">
+                <i class="fa fa-external-link mr-2"></i>
+                立即跳转
+            </button>
+        </div>
+        
+        <div class="mt-8 text-center text-gray-400 text-xs">
+            <p>© 2025 自动跳转页面</p>
+        </div>
     </div>
-
-    <button class="toggle-night-mode-btn" onclick="toggleNightMode()">
-        <i class="fa-solid fa-sun"></i>
-        <i class="fa-solid fa-moon"></i>
-    </button>
-
-    <div class="toast" id="toast"></div>
-
-    <!-- 添加跳转新窗口的链接，并应用居中类 -->
-    <div class="center-link">
-        <a href="http://192.168.12.1:5500" target="_blank" class="text-blue-500 hover:underline">SSH远程连接</a>
-    </div>
-
+    
     <script>
-        function updateCommand() {
-            const ssid = document.getElementById('ssid').value;
-            const password = document.getElementById('password').value;
-            const interfaceName = document.getElementById('interface').value || 'usbwlan';
-            const command = `sudo nmcli dev wifi connect "${ssid}" password "${password}" ifname ${interfaceName}`;
-            document.getElementById('output').value = command;
-        }
-
-        function showToast(message, duration = 2000) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), duration);
-        }
-
-        async function copyCommand() {
-            const output = document.getElementById('output');
-            const textToCopy = output.value;
-            try {
-                if (navigator.clipboard) {
-                    await navigator.clipboard.writeText(textToCopy);
-                    showToast('✅ 命令已复制到剪贴板！');
-                    console.log('复制成功');
-                } else {
-                    throw new Error('Clipboard API 不可用');
-                }
-            } catch (err) {
-                console.error('复制失败:', err);
-                showToast('⚠️ 复制失败，请手动选择文本复制');
-                // 尝试旧的复制方法
-                const textArea = document.createElement('textarea');
-                textArea.value = textToCopy;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    const successful = document.execCommand('copy');
-                    if (successful) {
-                        showToast('✅ 命令已复制到剪贴板！');
-                        console.log('使用旧方法复制成功');
-                    } else {
-                        showToast('⚠️ 复制失败，请手动选择文本复制');
-                        console.log('使用旧方法复制失败');
-                    }
-                } catch (e) {
-                    showToast('⚠️ 复制失败，请手动选择文本复制');
-                    console.log('使用旧方法复制时出错:', e);
-                }
-                document.body.removeChild(textArea);
-            }
-        }
-
-        function clearAll() {
-            document.getElementById('ssid').value = '';
-            document.getElementById('password').value = '';
-            document.getElementById('interface').value = 'usbwlan';
-            document.getElementById('output').value = '';
-            showToast('🧹 已清空所有内容', 1500);
-        }
-
-        function checkTimeAndSetMode() {
-            const now = new Date();
-            const hour = now.getHours();
-            const body = document.body;
-            if (hour >= 18 || hour < 6) {
-                body.classList.add('night-mode');
+        // 目标URL - 请替换为你想要跳转的网址
+        const targetUrl = 'https://www.baidu.com';
+        
+        // 倒计时和进度条功能
+        let countdown = 3;
+        const countdownEl = document.getElementById('countdown');
+        const progressBarEl = document.getElementById('progress-bar');
+        const redirectBtn = document.getElementById('redirect-btn');
+        
+        // 更新倒计时和进度条
+        const updateCountdown = () => {
+            countdownEl.textContent = countdown;
+            progressBarEl.style.width = `${(1 - countdown / 3) * 100}%`;
+            
+            if (countdown <= 0) {
+                clearInterval(timer);
+                window.location.href = targetUrl;
             } else {
-                body.classList.remove('night-mode');
+                countdown--;
             }
-        }
-
-        function toggleNightMode() {
-            const body = document.body;
-            body.classList.toggle('night-mode');
-        }
-
-        // 输入监听
-        document.getElementById('ssid').addEventListener('input', updateCommand);
-        document.getElementById('password').addEventListener('input', updateCommand);
-        document.getElementById('interface').addEventListener('input', updateCommand);
-
-        // 初始化
-        updateCommand();
-        checkTimeAndSetMode();
-
-        // 每小时检查一次时间
-        setInterval(checkTimeAndSetMode, 3600000);
+        };
+        
+        // 立即跳转按钮
+        redirectBtn.addEventListener('click', () => {
+            window.location.href = targetUrl;
+        });
+        
+        // 初始更新
+        updateCountdown();
+        
+        // 设置定时器
+        const timer = setInterval(updateCountdown, 1000);
     </script>
 </body>
-
 </html>
     
