@@ -56,7 +56,7 @@
                 end`
                 .replace(/\s/g, ''); // 去除换行和空格
             
-            // 备用方案：若Intent URI失败，尝试直接调用Activity（可选）
+            // 备用方案：若Intent URI失败，尝试直接调用Activity
             const backupUri = `com.fengyun.live/.tv.core.main.ThirdLaunchActivity?channel_num=${channelNum}`;
             
             const startTime = Date.now();
@@ -94,9 +94,17 @@
             tryLaunchApp();
         }
 
-        // 消息提示函数保持不变
-        function showMessage(message) { /* ... 同原代码 ... */ }
-        function closeMessage() { /* ... 同原代码 ... */ }
+        function showMessage(message) {
+            const overlay = document.getElementById('messageOverlay');
+            const messageContent = document.getElementById('messageContent');
+            messageContent.textContent = message;
+            overlay.classList.add('active');
+        }
+        
+        function closeMessage() {
+            const overlay = document.getElementById('messageOverlay');
+            overlay.classList.remove('active');
+        }
     </script>
 </head>
 <body>
@@ -104,7 +112,7 @@
     <button onclick="openTVApp(11)">CCTV-1 (11频道)</button>
     <button onclick="openTVApp(22)">湖南卫视 (22频道)</button>
     
-    <!-- 消息提示框保持不变 -->
+    <!-- 消息提示框 -->
     <div id="messageOverlay" class="overlay">
         <div class="message-box">
             <p id="messageContent"></p>
@@ -112,4 +120,4 @@
         </div>
     </div>
 </body>
-</html>
+</html>    
