@@ -1,103 +1,268 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>频道跳转</title>
+    <title>频道跳转 - 风云直播</title>
     <meta charset="UTF-8">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        header {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .channel-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            padding: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .channel-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+        .instructions {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.85);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             visibility: hidden;
             opacity: 0;
-            transition: visibility 0s, opacity 0.3s linear;
+            transition: opacity 0.3s ease;
         }
-        
         .overlay.active {
             visibility: visible;
             opacity: 1;
         }
-        
         .message-box {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(to bottom, #2c3e50, #1a1a2e);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             text-align: center;
-            max-width: 300px;
-        }
-        
-        .close-btn {
-            background-color: #f44336;
+            max-width: 500px;
+            width: 90%;
             color: white;
+            border: 1px solid #3498db;
+        }
+        .message-box h2 {
+            margin-top: 0;
+            color: #3498db;
+        }
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 12px 25px;
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            border-radius: 50px;
+            font-weight: bold;
             cursor: pointer;
-            margin-top: 15px;
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+        .primary-btn {
+            background: linear-gradient(to right, #3498db, #1a5f9e);
+            color: white;
+        }
+        .secondary-btn {
+            background: linear-gradient(to right, #e74c3c, #c0392b);
+            color: white;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        @media (max-width: 600px) {
+            .channels-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+            h1 {
+                font-size: 2rem;
+            }
         }
     </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>风云直播 - 频道跳转</h1>
+            <p>点击下方频道按钮，直接在应用中观看直播</p>
+        </header>
+        
+        <div class="instructions">
+            <h2>使用说明：</h2>
+            <ul>
+                <li>确保已安装最新版<strong>风云直播</strong>应用</li>
+                <li>首次使用可能需要授予应用相关权限</li>
+                <li>点击频道按钮后等待3-5秒完成跳转</li>
+                <li>如遇问题，请查看下方的故障排除提示</li>
+            </ul>
+        </div>
+        
+        <div class="channels-grid">
+            <button class="channel-btn" onclick="openTVApp(1)">CCTV-1</button>
+            <button class="channel-btn" onclick="openTVApp(2)">CCTV-2</button>
+            <button class="channel-btn" onclick="openTVApp(3)">CCTV-5</button>
+            <button class="channel-btn" onclick="openTVApp(11)">湖南卫视</button>
+            <button class="channel-btn" onclick="openTVApp(12)">浙江卫视</button>
+            <button class="channel-btn" onclick="openTVApp(13)">江苏卫视</button>
+            <button class="channel-btn" onclick="openTVApp(21)">凤凰中文</button>
+            <button class="channel-btn" onclick="openTVApp(22)">凤凰资讯</button>
+            <button class="channel-btn" onclick="openTVApp(101)">NBA直播</button>
+            <button class="channel-btn" onclick="openTVApp(102)">英超直播</button>
+            <button class="channel-btn" onclick="openTVApp(201)">电影频道</button>
+            <button class="channel-btn" onclick="openTVApp(202)">少儿动画</button>
+        </div>
+        
+        <div class="instructions">
+            <h2>技术支持：</h2>
+            <p>如跳转失败，请尝试：</p>
+            <ol>
+                <li>确认已安装风云直播应用（包名：com.fengyun.live）</li>
+                <li>在系统设置中授予应用"安装未知应用"权限</li>
+                <li>重启应用后再试</li>
+                <li>更新应用到最新版本（当前版本号：1.24.0）</li>
+            </ol>
+        </div>
+    </div>
+    
+    <!-- 消息提示框 -->
+    <div id="messageOverlay" class="overlay">
+        <div class="message-box">
+            <h2>跳转提示</h2>
+            <p id="messageContent">正在尝试打开风云直播应用...</p>
+            <div class="btn-group">
+                <button class="action-btn primary-btn" onclick="retryOpen()">重试</button>
+                <button class="action-btn secondary-btn" onclick="closeMessage()">关闭</button>
+                <button class="action-btn" onclick="downloadApp()" style="background:linear-gradient(to right, #2ecc71, #27ae60);">下载应用</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        function openTVApp(channelNum) {
-            // 根据Manifest中定义的Intent Filter构造正确的Intent URI
-            const intentUri = `intent://change_channel_by_num/${channelNum}#Intent;
-                action=com.fengyun.live.action.CHANGE_CHANNEL_BY_NUM;
-                package=com.fengyun.live;
-                category=android.intent.category.BROWSABLE;
-                S.channel_num=${channelNum};
-                end`
-                .replace(/\s/g, ''); // 去除换行和空格
+        // 存储当前尝试的频道ID
+        let currentChannelId = null;
+        
+        function openTVApp(channelId) {
+            currentChannelId = channelId;
+            showMessage("正在跳转到频道...");
             
-            // 备用方案：若Intent URI失败，尝试直接调用Activity
-            const backupUri = `com.fengyun.live/.tv.core.main.ThirdLaunchActivity?channel_num=${channelNum}`;
+            // 构造符合Android规范的Intent
+            const intentUri = `intent:#Intent;` +
+                `action=com.fengyun.live.action.CHANGE_CHANNEL_BY_ID;` +
+                `package=com.fengyun.live;` +
+                `i.id=${channelId};` +
+                `S.channel_name=Channel_${channelId};` +
+                `end`;
+            
+            // 备用URL scheme
+            const schemeUrl = `fengyunlive://channel/${channelId}`;
             
             const startTime = Date.now();
-            let isAppOpened = false;
-
-            // 尝试通过Intent唤醒应用
-            const tryLaunchApp = () => {
-                window.location.href = intentUri;
-                
-                // 检测应用是否成功打开（通过页面隐藏状态判断）
-                const checkTimeout = setTimeout(() => {
-                    if (!isAppOpened && Date.now() - startTime < 6000) {
-                        // 尝试备用方案
-                        window.location.href = backupUri;
-                        
-                        // 最终检查
-                        setTimeout(() => {
-                            if (!isAppOpened) {
-                                showMessage("无法打开应用，请确保已安装并授予相关权限");
-                            }
-                        }, 2000);
-                    }
-                }, 2000);
-
-                // 监听页面可见性变化（应用打开会导致页面隐藏）
-                document.addEventListener('visibilitychange', () => {
-                    if (document.hidden) {
-                        isAppOpened = true;
-                        clearTimeout(checkTimeout);
-                        document.removeEventListener('visibilitychange', arguments.callee);
-                    }
-                });
+            
+            // 第一次尝试：标准Intent
+            window.location.href = intentUri;
+            
+            // 检测应用是否成功打开
+            const checkAppOpened = setTimeout(() => {
+                if (!document.hidden) {
+                    // 第二次尝试：备用Scheme
+                    window.location.href = schemeUrl;
+                    
+                    // 最终检查
+                    setTimeout(() => {
+                        if (!document.hidden) {
+                            showMessage("无法打开应用，请检查：<br>1. 是否安装风云直播应用<br>2. 是否授予相关权限<br>3. 应用是否支持此功能");
+                        }
+                    }, 3000);
+                }
+            }, 2000);
+            
+            // 监听页面可见性变化
+            const visibilityHandler = () => {
+                if (document.hidden) {
+                    clearTimeout(checkAppOpened);
+                    document.removeEventListener('visibilitychange', visibilityHandler);
+                }
             };
-
-            tryLaunchApp();
+            document.addEventListener('visibilitychange', visibilityHandler);
         }
-
+        
+        function retryOpen() {
+            if (currentChannelId !== null) {
+                openTVApp(currentChannelId);
+            }
+        }
+        
+        function downloadApp() {
+            showMessage("正在获取下载链接...");
+            // 模拟延迟
+            setTimeout(() => {
+                alert("请访问官方渠道下载最新版应用\nhttps://www.fengyun.tv/download");
+            }, 800);
+        }
+        
         function showMessage(message) {
             const overlay = document.getElementById('messageOverlay');
             const messageContent = document.getElementById('messageContent');
-            messageContent.textContent = message;
+            messageContent.innerHTML = message;
             overlay.classList.add('active');
         }
         
@@ -105,19 +270,13 @@
             const overlay = document.getElementById('messageOverlay');
             overlay.classList.remove('active');
         }
+        
+        // 添加键盘快捷键支持
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeMessage();
+            }
+        });
     </script>
-</head>
-<body>
-    <h1>电视频道跳转</h1>
-    <button onclick="openTVApp(11)">CCTV-1 (11频道)</button>
-    <button onclick="openTVApp(22)">湖南卫视 (22频道)</button>
-    
-    <!-- 消息提示框 -->
-    <div id="messageOverlay" class="overlay">
-        <div class="message-box">
-            <p id="messageContent"></p>
-            <button class="close-btn" onclick="closeMessage()">关闭</button>
-        </div>
-    </div>
 </body>
-</html>    
+</html>
