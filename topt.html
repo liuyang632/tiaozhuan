@@ -1,197 +1,515 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>频道跳转 - 风云直播</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>风云直播 - 频道一键跳转</title>
     <style>
         * {
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #1a2a6c);
-            color: white;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1b2f, #2d3250);
+            color: #f0f0f0;
             min-height: 100vh;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        header {
-            margin-bottom: 30px;
             padding: 20px;
-            background-color: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+        
+        .header {
+            text-align: center;
+            margin: 20px 0 30px;
+            max-width: 800px;
+            width: 100%;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #4e9af1;
+            text-shadow: 0 0 15px rgba(78, 154, 241, 0.7);
+        }
+        
         h1 {
-            margin-top: 0;
-            font-size: 2.5rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #4e9af1, #6c5ce7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        .panel {
+            background: rgba(30, 31, 51, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(78, 154, 241, 0.2);
+            flex: 1;
+            min-width: 300px;
+            max-width: 500px;
+        }
+        
+        .panel-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(78, 154, 241, 0.3);
+        }
+        
+        .panel-title i {
+            color: #4e9af1;
+            font-size: 1.8rem;
+        }
+        
         .channels-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 15px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
+        
         .channel-btn {
-            background: rgba(255, 255, 255, 0.15);
+            background: linear-gradient(145deg, #2d3250, #252941);
             border: none;
             border-radius: 10px;
-            color: white;
-            padding: 15px;
-            font-size: 1.1rem;
+            color: #f0f0f0;
+            padding: 15px 10px;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
+        
         .channel-btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(145deg, #3a3f63, #2d3250);
         }
+        
+        .channel-btn:hover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(78, 154, 241, 0.4) 0%, transparent 70%);
+            animation: rotate 4s linear infinite;
+            z-index: 0;
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .channel-btn span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .channel-btn .number {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #4e9af1;
+        }
+        
         .instructions {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(20, 21, 38, 0.6);
+            border-radius: 10px;
             padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            text-align: left;
+            margin-top: 20px;
         }
+        
+        .instructions h3 {
+            margin-bottom: 15px;
+            color: #4e9af1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions ul {
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .instructions strong {
+            color: #6c5ce7;
+        }
+        
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 0, 0, 0.9);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 1000;
             visibility: hidden;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: all 0.3s ease;
         }
+        
         .overlay.active {
             visibility: visible;
             opacity: 1;
         }
+        
         .message-box {
-            background: linear-gradient(to bottom, #2c3e50, #1a1a2e);
+            background: linear-gradient(135deg, #1a1b2f, #252941);
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
             text-align: center;
             max-width: 500px;
             width: 90%;
-            color: white;
-            border: 1px solid #3498db;
+            border: 1px solid rgba(78, 154, 241, 0.3);
+            position: relative;
         }
+        
         .message-box h2 {
-            margin-top: 0;
-            color: #3498db;
+            margin-bottom: 20px;
+            color: #4e9af1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
+        
+        #messageContent {
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+        
         .btn-group {
             display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
             flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
         }
+        
         .action-btn {
             padding: 12px 25px;
             border: none;
             border-radius: 50px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s ease;
-            min-width: 140px;
+            transition: all 0.3s ease;
+            min-width: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
+        
         .primary-btn {
-            background: linear-gradient(to right, #3498db, #1a5f9e);
+            background: linear-gradient(to right, #4e9af1, #6c5ce7);
             color: white;
+            box-shadow: 0 5px 15px rgba(78, 154, 241, 0.4);
         }
+        
         .secondary-btn {
             background: linear-gradient(to right, #e74c3c, #c0392b);
             color: white;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
         }
+        
+        .tertiary-btn {
+            background: linear-gradient(to right, #2ecc71, #27ae60);
+            color: white;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+        }
+        
         .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
-        footer {
+        
+        .action-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .troubleshooting {
             margin-top: 30px;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
+            padding: 20px;
+            background: rgba(20, 21, 38, 0.6);
+            border-radius: 10px;
+            max-width: 800px;
+            width: 100%;
         }
-        @media (max-width: 600px) {
-            .channels-grid {
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        
+        .troubleshooting h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4e9af1;
+        }
+        
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 250px;
+            background: rgba(30, 31, 51, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .step-number {
+            background: linear-gradient(to right, #4e9af1, #6c5ce7);
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .step h3 {
+            margin-bottom: 10px;
+            color: #f0f0f0;
+        }
+        
+        .step p {
+            color: #c0c0c0;
+            line-height: 1.6;
+        }
+        
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: rgba(240, 240, 240, 0.6);
+            font-size: 0.9rem;
+            padding: 20px;
+            max-width: 800px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
             }
+            
+            .panel {
+                width: 100%;
+            }
+            
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
             }
         }
     </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
+    <div class="header">
+        <div class="logo">
+            <i class="fas fa-tv"></i>
+        </div>
+        <h1>风云直播频道一键跳转</h1>
+        <p class="subtitle">点击频道按钮，快速在应用中观看直播</p>
+    </div>
+    
     <div class="container">
-        <header>
-            <h1>风云直播 - 频道跳转</h1>
-            <p>点击下方频道按钮，直接在应用中观看直播</p>
-        </header>
-        
-        <div class="instructions">
-            <h2>使用说明：</h2>
-            <ul>
-                <li>确保已安装最新版<strong>风云直播</strong>应用</li>
-                <li>首次使用可能需要授予应用相关权限</li>
-                <li>点击频道按钮后等待3-5秒完成跳转</li>
-                <li>如遇问题，请查看下方的故障排除提示</li>
-            </ul>
+        <div class="panel">
+            <div class="panel-title">
+                <i class="fas fa-satellite"></i>
+                <h2>央视频道</h2>
+            </div>
+            <div class="channels-grid">
+                <button class="channel-btn" onclick="openTVApp(1)">
+                    <span class="number">1</span>
+                    <span>CCTV-1</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(2)">
+                    <span class="number">2</span>
+                    <span>CCTV-2</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(3)">
+                    <span class="number">3</span>
+                    <span>CCTV-5</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(4)">
+                    <span class="number">4</span>
+                    <span>CCTV-6</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(5)">
+                    <span class="number">5</span>
+                    <span>CCTV-8</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(6)">
+                    <span class="number">6</span>
+                    <span>CCTV-13</span>
+                </button>
+            </div>
+            
+            <div class="instructions">
+                <h3><i class="fas fa-info-circle"></i> 温馨提示</h3>
+                <ul>
+                    <li>首次使用可能需要授予应用<b>安装未知应用</b>权限</li>
+                    <li>确保已安装最新版 <strong>风云直播</strong> (版本号: 1.24.0)</li>
+                    <li>点击后请等待3-5秒完成跳转</li>
+                </ul>
+            </div>
         </div>
         
-        <div class="channels-grid">
-            <button class="channel-btn" onclick="openTVApp(1)">CCTV-1</button>
-            <button class="channel-btn" onclick="openTVApp(2)">CCTV-2</button>
-            <button class="channel-btn" onclick="openTVApp(3)">CCTV-5</button>
-            <button class="channel-btn" onclick="openTVApp(11)">湖南卫视</button>
-            <button class="channel-btn" onclick="openTVApp(12)">浙江卫视</button>
-            <button class="channel-btn" onclick="openTVApp(13)">江苏卫视</button>
-            <button class="channel-btn" onclick="openTVApp(21)">凤凰中文</button>
-            <button class="channel-btn" onclick="openTVApp(22)">凤凰资讯</button>
-            <button class="channel-btn" onclick="openTVApp(101)">NBA直播</button>
-            <button class="channel-btn" onclick="openTVApp(102)">英超直播</button>
-            <button class="channel-btn" onclick="openTVApp(201)">电影频道</button>
-            <button class="channel-btn" onclick="openTVApp(202)">少儿动画</button>
-        </div>
-        
-        <div class="instructions">
-            <h2>技术支持：</h2>
-            <p>如跳转失败，请尝试：</p>
-            <ol>
-                <li>确认已安装风云直播应用（包名：com.fengyun.live）</li>
-                <li>在系统设置中授予应用"安装未知应用"权限</li>
-                <li>重启应用后再试</li>
-                <li>更新应用到最新版本（当前版本号：1.24.0）</li>
-            </ol>
+        <div class="panel">
+            <div class="panel-title">
+                <i class="fas fa-globe-asia"></i>
+                <h2>卫视频道</h2>
+            </div>
+            <div class="channels-grid">
+                <button class="channel-btn" onclick="openTVApp(11)">
+                    <span class="number">11</span>
+                    <span>湖南卫视</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(12)">
+                    <span class="number">12</span>
+                    <span>浙江卫视</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(13)">
+                    <span class="number">13</span>
+                    <span>江苏卫视</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(14)">
+                    <span class="number">14</span>
+                    <span>东方卫视</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(15)">
+                    <span class="number">15</span>
+                    <span>北京卫视</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(16)">
+                    <span class="number">16</span>
+                    <span>广东卫视</span>
+                </button>
+            </div>
+            
+            <div class="panel-title" style="margin-top: 30px;">
+                <i class="fas fa-film"></i>
+                <h2>特色频道</h2>
+            </div>
+            <div class="channels-grid">
+                <button class="channel-btn" onclick="openTVApp(101)">
+                    <span class="number">101</span>
+                    <span>凤凰中文</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(102)">
+                    <span class="number">102</span>
+                    <span>凤凰资讯</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(201)">
+                    <span class="number">201</span>
+                    <span>电影频道</span>
+                </button>
+                <button class="channel-btn" onclick="openTVApp(202)">
+                    <span class="number">202</span>
+                    <span>少儿动画</span>
+                </button>
+            </div>
         </div>
     </div>
+    
+    <div class="troubleshooting">
+        <h2><i class="fas fa-tools"></i> 技术支持与故障排除</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>检查应用安装</h3>
+                <p>确保设备已安装最新版风云直播应用。如果未安装，请点击下方"下载应用"按钮。</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>授予权限</h3>
+                <p>在系统设置中找到风云直播应用，授予"安装未知应用"权限，允许从浏览器启动应用。</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>更新应用</h3>
+                <p>确保应用为最新版本(1.24.0+)，旧版本可能不支持网页跳转功能。</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h3>浏览器支持</h3>
+                <p>建议使用Chrome、Firefox等现代浏览器，某些国产浏览器可能限制跳转功能。</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>风云直播 &copy; 2023 - 包名: com.fengyun.live - 当前版本: 1.24.0</p>
+        <p>技术支持: support@fengyun.tv | 问题反馈: feedback@fengyun.tv</p>
+    </footer>
     
     <!-- 消息提示框 -->
     <div id="messageOverlay" class="overlay">
         <div class="message-box">
-            <h2>跳转提示</h2>
+            <h2><i class="fas fa-exclamation-triangle"></i> 跳转提示</h2>
             <p id="messageContent">正在尝试打开风云直播应用...</p>
             <div class="btn-group">
-                <button class="action-btn primary-btn" onclick="retryOpen()">重试</button>
-                <button class="action-btn secondary-btn" onclick="closeMessage()">关闭</button>
-                <button class="action-btn" onclick="downloadApp()" style="background:linear-gradient(to right, #2ecc71, #27ae60);">下载应用</button>
+                <button class="action-btn primary-btn" onclick="retryOpen()">
+                    <i class="fas fa-redo"></i> 重试跳转
+                </button>
+                <button class="action-btn tertiary-btn" onclick="downloadApp()">
+                    <i class="fas fa-download"></i> 下载应用
+                </button>
+                <button class="action-btn secondary-btn" onclick="closeMessage()">
+                    <i class="fas fa-times"></i> 取消
+                </button>
             </div>
         </div>
     </div>
@@ -202,9 +520,12 @@
         
         function openTVApp(channelId) {
             currentChannelId = channelId;
-            showMessage("正在跳转到频道...");
+            showMessage(`正在跳转到频道 ${channelId}...`);
             
-            // 构造符合Android规范的Intent
+            // 记录开始时间
+            const startTime = Date.now();
+            
+            // 方案1：标准Intent语法
             const intentUri = `intent:#Intent;` +
                 `action=com.fengyun.live.action.CHANGE_CHANNEL_BY_ID;` +
                 `package=com.fengyun.live;` +
@@ -212,37 +533,52 @@
                 `S.channel_name=Channel_${channelId};` +
                 `end`;
             
-            // 备用URL scheme
+            // 方案2：备用Scheme语法
             const schemeUrl = `fengyunlive://channel/${channelId}`;
             
-            const startTime = Date.now();
+            // 方案3：直接通过包名启动
+            const packageUrl = `intent:#Intent;package=com.fengyun.live;end`;
             
-            // 第一次尝试：标准Intent
+            // 尝试标准Intent
             window.location.href = intentUri;
             
-            // 检测应用是否成功打开
-            const checkAppOpened = setTimeout(() => {
-                if (!document.hidden) {
-                    // 第二次尝试：备用Scheme
+            // 设置超时检测
+            setTimeout(() => {
+                if (Date.now() - startTime < 2500 && !document.hidden) {
+                    // 尝试备用Scheme
                     window.location.href = schemeUrl;
                     
-                    // 最终检查
+                    // 设置第二次检测
                     setTimeout(() => {
-                        if (!document.hidden) {
-                            showMessage("无法打开应用，请检查：<br>1. 是否安装风云直播应用<br>2. 是否授予相关权限<br>3. 应用是否支持此功能");
+                        if (Date.now() - startTime < 5000 && !document.hidden) {
+                            // 尝试直接打开应用
+                            window.location.href = packageUrl;
+                            
+                            // 最终检测
+                            setTimeout(() => {
+                                if (Date.now() - startTime < 8000 && !document.hidden) {
+                                    showMessage(
+                                        "无法打开应用，请检查：<br><br>" +
+                                        "1. 是否已安装风云直播应用<br>" +
+                                        "2. 是否授予了相关权限<br>" +
+                                        "3. 应用是否为最新版本<br><br>" +
+                                        "您也可以尝试手动打开应用，或下载最新版本"
+                                    );
+                                }
+                            }, 3000);
                         }
-                    }, 3000);
+                    }, 2500);
                 }
             }, 2000);
             
             // 监听页面可见性变化
-            const visibilityHandler = () => {
+            document.addEventListener('visibilitychange', function handler() {
                 if (document.hidden) {
-                    clearTimeout(checkAppOpened);
-                    document.removeEventListener('visibilitychange', visibilityHandler);
+                    // 成功跳转，关闭消息
+                    closeMessage();
+                    document.removeEventListener('visibilitychange', handler);
                 }
-            };
-            document.addEventListener('visibilitychange', visibilityHandler);
+            });
         }
         
         function retryOpen() {
@@ -252,10 +588,11 @@
         }
         
         function downloadApp() {
-            showMessage("正在获取下载链接...");
+            showMessage("正在获取最新版应用下载链接...");
             // 模拟延迟
             setTimeout(() => {
-                alert("请访问官方渠道下载最新版应用\nhttps://www.fengyun.tv/download");
+                window.open('https://www.fengyun.tv/download', '_blank');
+                closeMessage();
             }, 800);
         }
         
