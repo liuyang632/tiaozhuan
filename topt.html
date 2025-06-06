@@ -1,11 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>频道跳转</title>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0;url=http://110.42.53.221:5530/h5">
-    <title>Redirecting...</title>
+    <!-- 安卓设备识别 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <script>
+        function openTVApp(channel) {
+            // 方案1：直接使用URL Scheme
+            const schemeUrl = `tvlive://channel/${channel}`; // 替换成实际Scheme
+            
+            // 方案2：备用Intent方式（适用于Chrome）
+            const packageName = "com.netlive.tv"; // 替换实际包名
+            const intentUrl = `intent://channel/${channel}#Intent;scheme=tvlive;package=${packageName};end`;
+            
+            // 尝试跳转
+            window.location.href = schemeUrl;
+            
+            // 跳转失败处理（如未安装应用）
+            setTimeout(() => {
+                if (!document.hidden) {
+                    // 跳转应用商店或显示提示
+                    alert("应用未安装，正在跳转商店");
+                    window.location.href = `market://details?id=${packageName}`;
+                }
+            }, 2000);
+        }
+    </script>
 </head>
 <body>
-    <!-- 此页面会立即跳转到指定URL -->
+    <h1>电视频道跳转</h1>
+    <button onclick="openTVApp(11)">CCTV-1 (11频道)</button>
+    <button onclick="openTVApp(22)">湖南卫视 (22频道)</button>
 </body>
-</html>    
+</html>
