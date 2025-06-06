@@ -7,27 +7,50 @@
     <meta name="mobile-web-app-capable" content="yes">
     <script>
         function openTVApp(channel) {
-            // 方案1：直接使用URL Scheme
-            const schemeUrl = `tvlive://channel/${channel}`; // 替换成实际Scheme
-            
-            // 方案2：备用Intent方式（适用于Chrome）
-            const packageName = "tv.danmaku.bili"; // 替换实际包名
+            // 方案1：使用Intent方式（适用于Chrome和大多数现代浏览器）
+            const packageName = "com.netlive.tv";
             const intentUrl = `intent://channel/${channel}#Intent;scheme=tvlive;package=${packageName};end`;
             
-            // 尝试跳转
-            window.location.href = schemeUrl;
+            // 方案2：备用URL Scheme方式
+            const schemeUrl = `tvlive://channel/${channel}`;
             
-            // 跳转失败处理（如未安装应用）
-            setTimeout(() => {
-                if (!document.hidden) {
-                    // 跳转应用商店或显示提示
-                    alert("应用未安装，正在跳转商店");
-                    window.location.href = `market://details?id=${packageName}`;
+            // 记录开始时间，用于判断应用是否成功打开
+            const startTime = Date.now();
+            
+            // 尝试使用Intent跳转
+            window.location.href = intentUrl;
+            
+            // 检测应用是否成功打开
+            const checkAppOpened = setTimeout(() => {
+                if (Date.now() - startTime < 3000) {
+                    // 如果时间差小于3秒，说明应用未打开
+                    // 尝试使用备用URL Scheme方式
+                    window.location.href = schemeUrl;
+                    
+                    // 设置第二次检查
+                    setTimeout(() => {
+                        if (Date.now() - startTime < 6000) {
+                            // 如果两次尝试后应用仍未打开
+                            if (!document.hidden) {
+                                alert("应用未安装，正在跳转商店");
+                                window.location.href = `market://details?id=${packageName}`;
+                            }
+                        }
+                    }, 3000);
                 }
             }, 2000);
+            
+            // 页面隐藏事件，用于检测应用是否成功打开
+            document.addEventListener('visibilitychange', function handler() {
+                if (document.hidden) {
+                    // 如果页面被隐藏，说明应用成功打开
+                    clearTimeout(checkAppOpened);
+                    document.removeEventListener('visibilitychange', handler);
+                }
+            });
         }
     </script>
-</head>
+</body>
 <body>
     <h1>电视频道跳转</h1>
     <button onclick="openTVApp(11)">CCTV-1 (11频道)</button>
