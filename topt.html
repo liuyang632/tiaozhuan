@@ -3,7 +3,6 @@
 <head>
     <title>频道跳转</title>
     <meta charset="UTF-8">
-    <!-- 安卓设备识别 -->
     <meta name="mobile-web-app-capable" content="yes">
     <style>
         .overlay {
@@ -48,11 +47,10 @@
     </style>
     <script>
         function openTVApp(channel) {
-            // 方案1：使用Intent方式（适用于Chrome和大多数现代浏览器）
-            const packageName = "com.netlive.tv";
-            const intentUrl = `intent://channel/${channel}#Intent;scheme=tvlive;package=${packageName};end`;
+            // 尝试使用完整的Intent URI（优先级最高）
+            const intentUrl = `intent://channel/${channel}#Intent;scheme=tvlive;package=com.netlive.tv;category=android.intent.category.BROWSABLE;S.browser_fallback_url=${encodeURIComponent(window.location.href)};end`;
             
-            // 方案2：备用URL Scheme方式
+            // 备用方案：直接使用URL Scheme
             const schemeUrl = `tvlive://channel/${channel}`;
             
             // 记录开始时间，用于判断应用是否成功打开
@@ -64,26 +62,21 @@
             // 检测应用是否成功打开
             const checkAppOpened = setTimeout(() => {
                 if (Date.now() - startTime < 3000) {
-                    // 如果时间差小于3秒，说明应用未打开
-                    // 尝试使用备用URL Scheme方式
-                    window.location.href = schemeUrl;
+                    // 时间差小于3秒，说明应用未打开
+                    window.location.href = schemeUrl; // 尝试备用方案
                     
-                    // 设置第二次检查
+                    // 最终检查
                     setTimeout(() => {
-                        if (Date.now() - startTime < 6000) {
-                            // 如果两次尝试后应用仍未打开
-                            if (!document.hidden) {
-                                showMessage("应用未安装，请先安装电视直播应用");
-                            }
+                        if (Date.now() - startTime < 6000 && !document.hidden) {
+                            showMessage("无法打开应用，请确保已安装并授予相关权限");
                         }
                     }, 3000);
                 }
             }, 2000);
             
-            // 页面隐藏事件，用于检测应用是否成功打开
+            // 监听页面可见性变化（应用成功打开会导致当前页面被隐藏）
             document.addEventListener('visibilitychange', function handler() {
                 if (document.hidden) {
-                    // 如果页面被隐藏，说明应用成功打开
                     clearTimeout(checkAppOpened);
                     document.removeEventListener('visibilitychange', handler);
                 }
@@ -93,7 +86,6 @@
         function showMessage(message) {
             const overlay = document.getElementById('messageOverlay');
             const messageContent = document.getElementById('messageContent');
-            
             messageContent.textContent = message;
             overlay.classList.add('active');
         }
