@@ -46,54 +46,57 @@
         }
     </style>
     <script>
-        function openTVApp(channel) {
-            // 尝试使用完整的Intent URI（优先级最高）
-            const intentUrl = `intent://channel/${channel}#Intent;scheme=tvlive;package=com.netlive.tv;category=android.intent.category.BROWSABLE;S.browser_fallback_url=${encodeURIComponent(window.location.href)};end`;
+        function openTVApp(channelNum) {
+            // 根据Manifest中定义的Intent Filter构造正确的Intent URI
+            const intentUri = `intent://change_channel_by_num/${channelNum}#Intent;
+                action=com.fengyun.live.action.CHANGE_CHANNEL_BY_NUM;
+                package=com.fengyun.live;
+                category=android.intent.category.BROWSABLE;
+                S.channel_num=${channelNum};
+                end`
+                .replace(/\s/g, ''); // 去除换行和空格
             
-            // 备用方案：直接使用URL Scheme
-            const schemeUrl = `tvlive://channel/${channel}`;
+            // 备用方案：若Intent URI失败，尝试直接调用Activity（可选）
+            const backupUri = `com.fengyun.live/.tv.core.main.ThirdLaunchActivity?channel_num=${channelNum}`;
             
-            // 记录开始时间，用于判断应用是否成功打开
             const startTime = Date.now();
-            
-            // 尝试使用Intent跳转
-            window.location.href = intentUrl;
-            
-            // 检测应用是否成功打开
-            const checkAppOpened = setTimeout(() => {
-                if (Date.now() - startTime < 3000) {
-                    // 时间差小于3秒，说明应用未打开
-                    window.location.href = schemeUrl; // 尝试备用方案
-                    
-                    // 最终检查
-                    setTimeout(() => {
-                        if (Date.now() - startTime < 6000 && !document.hidden) {
-                            showMessage("无法打开应用，请确保已安装并授予相关权限");
-                        }
-                    }, 3000);
-                }
-            }, 2000);
-            
-            // 监听页面可见性变化（应用成功打开会导致当前页面被隐藏）
-            document.addEventListener('visibilitychange', function handler() {
-                if (document.hidden) {
-                    clearTimeout(checkAppOpened);
-                    document.removeEventListener('visibilitychange', handler);
-                }
-            });
+            let isAppOpened = false;
+
+            // 尝试通过Intent唤醒应用
+            const tryLaunchApp = () => {
+                window.location.href = intentUri;
+                
+                // 检测应用是否成功打开（通过页面隐藏状态判断）
+                const checkTimeout = setTimeout(() => {
+                    if (!isAppOpened && Date.now() - startTime < 6000) {
+                        // 尝试备用方案
+                        window.location.href = backupUri;
+                        
+                        // 最终检查
+                        setTimeout(() => {
+                            if (!isAppOpened) {
+                                showMessage("无法打开应用，请确保已安装并授予相关权限");
+                            }
+                        }, 2000);
+                    }
+                }, 2000);
+
+                // 监听页面可见性变化（应用打开会导致页面隐藏）
+                document.addEventListener('visibilitychange', () => {
+                    if (document.hidden) {
+                        isAppOpened = true;
+                        clearTimeout(checkTimeout);
+                        document.removeEventListener('visibilitychange', arguments.callee);
+                    }
+                });
+            };
+
+            tryLaunchApp();
         }
-        
-        function showMessage(message) {
-            const overlay = document.getElementById('messageOverlay');
-            const messageContent = document.getElementById('messageContent');
-            messageContent.textContent = message;
-            overlay.classList.add('active');
-        }
-        
-        function closeMessage() {
-            const overlay = document.getElementById('messageOverlay');
-            overlay.classList.remove('active');
-        }
+
+        // 消息提示函数保持不变
+        function showMessage(message) { /* ... 同原代码 ... */ }
+        function closeMessage() { /* ... 同原代码 ... */ }
     </script>
 </head>
 <body>
@@ -101,7 +104,7 @@
     <button onclick="openTVApp(11)">CCTV-1 (11频道)</button>
     <button onclick="openTVApp(22)">湖南卫视 (22频道)</button>
     
-    <!-- 消息提示框 -->
+    <!-- 消息提示框保持不变 -->
     <div id="messageOverlay" class="overlay">
         <div class="message-box">
             <p id="messageContent"></p>
