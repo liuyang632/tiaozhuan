@@ -5,6 +5,47 @@
     <meta charset="UTF-8">
     <!-- 安卓设备识别 -->
     <meta name="mobile-web-app-capable" content="yes">
+    <style>
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s linear;
+        }
+        
+        .overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .message-box {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 300px;
+        }
+        
+        .close-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+    </style>
     <script>
         function openTVApp(channel) {
             // 方案1：使用Intent方式（适用于Chrome和大多数现代浏览器）
@@ -32,8 +73,7 @@
                         if (Date.now() - startTime < 6000) {
                             // 如果两次尝试后应用仍未打开
                             if (!document.hidden) {
-                                alert("应用未安装，正在跳转商店");
-                                window.location.href = `market://details?id=${packageName}`;
+                                showMessage("应用未安装，请先安装电视直播应用");
                             }
                         }
                     }, 3000);
@@ -49,11 +89,32 @@
                 }
             });
         }
+        
+        function showMessage(message) {
+            const overlay = document.getElementById('messageOverlay');
+            const messageContent = document.getElementById('messageContent');
+            
+            messageContent.textContent = message;
+            overlay.classList.add('active');
+        }
+        
+        function closeMessage() {
+            const overlay = document.getElementById('messageOverlay');
+            overlay.classList.remove('active');
+        }
     </script>
-</body>
+</head>
 <body>
     <h1>电视频道跳转</h1>
     <button onclick="openTVApp(11)">CCTV-1 (11频道)</button>
     <button onclick="openTVApp(22)">湖南卫视 (22频道)</button>
+    
+    <!-- 消息提示框 -->
+    <div id="messageOverlay" class="overlay">
+        <div class="message-box">
+            <p id="messageContent"></p>
+            <button class="close-btn" onclick="closeMessage()">关闭</button>
+        </div>
+    </div>
 </body>
 </html>
